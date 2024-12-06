@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\API\v1\status;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class HealthCheckTest extends TestCase
+class GetTest extends TestCase
 {
-    public function testStatusEndpointReturningHealthData(): void
+    public function testStatusApiEndpointShouldReturn_200(): void
     {
         $response = $this->getJson(route('api.v1.status'))
             ->assertStatus(200)
@@ -26,7 +26,7 @@ class HealthCheckTest extends TestCase
         $parsedUpdatedAt = Carbon::create($decodedJson["updated_at"])->toISOString();
         $this->assertTrue($parsedUpdatedAt === $decodedJson["updated_at"]);
         $this->assertTrue($decodedJson["mysql"]["version"] === "8.0.40");
-        //$this->assertTrue($decodedJson["mysql"]["max_connections"] === 151);
-        //$this->assertTrue($decodedJson["mysql"]["threads_connected"] === 1);
+        $this->assertTrue($decodedJson["mysql"]["max_connections"] === 151);
+        $this->assertTrue($decodedJson["mysql"]["threads_connected"] === 1);
     }
 }
