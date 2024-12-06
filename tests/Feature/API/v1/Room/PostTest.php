@@ -17,7 +17,7 @@ class PostTest extends TestCase
             'room' => 'Sala 53'
         ];
 
-        $response = $this->post(route('api.v1.rooms.store', $data, ['Accept' => 'application/json']));
+        $response = $this->postJson(route('api.v1.rooms.store', $data, ['Accept' => 'application/json']));
         $parsedData = $response->getData();
 
         $response->assertCreated() // 201
@@ -31,7 +31,7 @@ class PostTest extends TestCase
 
     public function testRoomCreationWithoutRequiredValues(): void
     {
-        $response = $this->post(route('api.v1.rooms.store'), [], ['Accept' => 'application/json']);
+        $response = $this->postJson(route('api.v1.rooms.store'), [], ['Accept' => 'application/json']);
 
         $response->assertUnprocessable() // 422
             ->assertInvalid(['room']);

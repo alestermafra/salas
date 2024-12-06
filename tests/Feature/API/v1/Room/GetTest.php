@@ -13,9 +13,8 @@ class GetTest extends TestCase
 
     public function testRoomsEndpointWithNoRooms(): void
     {
-        $response = $this->get(route('api.v1.rooms.index'));
-
-        $response->assertStatus(200)
+        $this->getJson(route('api.v1.rooms.index'))
+            ->assertSuccessful()
             ->assertJsonIsArray()
             ->assertJsonCount(0);
     }
@@ -25,23 +24,22 @@ class GetTest extends TestCase
         $room1 = Room::factory()->create();
         $room2 = Room::factory()->create();
 
-        $response = $this->get(route('api.v1.rooms.index'));
-
-        $response->assertStatus(200)
+        $this->getJson(route('api.v1.rooms.index'))
+            ->assertSuccessful(200)
             ->assertJsonIsArray()
             ->assertJsonCount(2)
             ->assertExactJson([
                 [
-                    "id" => $room1->id,
-                    "room" => $room1->room,
-                    "created_at" => $room1->created_at,
-                    "updated_at" => $room1->updated_at
+                    'id' => $room1->id,
+                    'room' => $room1->room,
+                    'created_at' => $room1->created_at,
+                    'updated_at' => $room1->updated_at
                 ],
                 [
-                    "id" => $room2->id,
-                    "room" => $room2->room,
-                    "created_at" => $room2->created_at,
-                    "updated_at" => $room2->updated_at
+                    'id' => $room2->id,
+                    'room' => $room2->room,
+                    'created_at' => $room2->created_at,
+                    'updated_at' => $room2->updated_at
                 ],
             ]);
     }
@@ -50,9 +48,8 @@ class GetTest extends TestCase
     {
         Room::factory(30)->create();
 
-        $response = $this->get(route('api.v1.rooms.index'));
-
-        $response->assertStatus(200)
+        $this->getJson(route('api.v1.rooms.index'))
+            ->assertSuccessful()
             ->assertJsonIsArray()
             ->assertJsonCount(30);
     }
@@ -61,14 +58,13 @@ class GetTest extends TestCase
     {
         $room = Room::factory()->create();
 
-        $response = $this->get(route('api.v1.rooms.show', $room));
-
-        $response->assertStatus(200)
+        $this->getJson(route('api.v1.rooms.show', $room))
+            ->assertSuccessful()
             ->assertExactJson([
-                "id" => $room->id,
-                "room" => $room->room,
-                "created_at" => $room->created_at->toISOString(),
-                "updated_at" => $room->updated_at->toISOString()
+                'id' => $room->id,
+                'room' => $room->room,
+                'created_at' => $room->created_at->toISOString(),
+                'updated_at' => $room->updated_at->toISOString()
             ]);
     }
 
@@ -76,8 +72,7 @@ class GetTest extends TestCase
     {
         $nonExistingRoomId = 999;
 
-        $response = $this->get(route('api.v1.rooms.show', $nonExistingRoomId));
-
-        $response->assertStatus(404);
+        $this->getJson(route('api.v1.rooms.show', $nonExistingRoomId))
+            ->assertNotFound();
     }
 }

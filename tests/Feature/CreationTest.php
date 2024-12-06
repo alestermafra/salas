@@ -27,7 +27,7 @@ class CreationTest extends TestCase
             'room_id' => $room->id,
             'description' => 'Team meeting'
         ];
-        $reservation = Reservation::factory()->create($data);
+        Reservation::factory()->create($data);
 
         $this->assertDatabaseHas('reservations', $data);
     }
@@ -35,6 +35,7 @@ class CreationTest extends TestCase
     public function testRoomHasManyReservations()
     {
         $room = Room::factory()->hasReservations(3)->create();
+
         $this->assertCount(3, $room->reservations);
     }
 
