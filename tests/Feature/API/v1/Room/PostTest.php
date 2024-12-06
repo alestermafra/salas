@@ -37,7 +37,7 @@ class PostTest extends TestCase
             ->assertInvalid(['room']);
     }
 
-    public function testRoomEditing(): void
+    public function testRoomUpdating(): void
     {
         $room = Room::factory()->create();
         $data = ['room' => 'Sala Ceres'];
@@ -53,7 +53,7 @@ class PostTest extends TestCase
             ]);
     }
 
-    public function testRoomEditingWithoutRequiredValues(): void
+    public function testRoomUpdatingWithInvalidData(): void
     {
         $room = Room::factory()->create();
         $data = [];
@@ -62,6 +62,16 @@ class PostTest extends TestCase
 
         $response->assertUnprocessable()
             ->assertInvalid(['room']);
+    }
+
+    public function testUpdatingARoomThatDoesNotExist(): void
+    {
+        $roomId = 999;
+        $data = ['room' => 'Sala Ceres'];
+
+        $response = $this->putJson(route('api.v1.rooms.update', $roomId), $data);
+
+        $response->assertNotFound();
     }
 
     public function testRoomDeletion(): void
