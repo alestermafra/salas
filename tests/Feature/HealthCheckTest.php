@@ -11,7 +11,7 @@ class HealthCheckTest extends TestCase
 {
     public function testStatusEndpointReturningHealthData(): void
     {
-        $response = $this->getJson('/status')
+        $response = $this->getJson(route('api.v1.status'))
             ->assertStatus(200)
             ->assertJsonStructure([
                 "updated_at",
