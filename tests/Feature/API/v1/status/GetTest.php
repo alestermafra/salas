@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class GetTest extends TestCase
 {
-    public function testStatusApiEndpointShouldReturn_200(): void
+    public function testStatusEndpointReturnsExpectedStructure(): void
     {
         $response = $this->getJson(route('api.v1.status'))
             ->assertSuccessful();

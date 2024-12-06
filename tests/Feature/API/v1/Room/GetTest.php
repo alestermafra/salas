@@ -11,7 +11,7 @@ class GetTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testRoomsEndpointWithNoRooms(): void
+    public function testReturnsEmptyListWhenNoRoomsExist(): void
     {
         $this->getJson(route('api.v1.rooms.index'))
             ->assertSuccessful()
@@ -19,7 +19,7 @@ class GetTest extends TestCase
             ->assertJsonCount(0);
     }
 
-    public function testRoomsEndpointWith_2Rooms(): void
+    public function testReturnsListWithTwoRooms(): void
     {
         $room1 = Room::factory()->create();
         $room2 = Room::factory()->create();
@@ -44,7 +44,7 @@ class GetTest extends TestCase
             ]);
     }
 
-    public function testRoomsEndpointWith_30Rooms(): void
+    public function testReturnsListWithThirtyRooms(): void
     {
         Room::factory(30)->create();
 
@@ -54,7 +54,7 @@ class GetTest extends TestCase
             ->assertJsonCount(30);
     }
 
-    public function testRoomsShowEndpointWithExistingRoom(): void
+    public function testReturnsRoomDetailsForExistingRoom(): void
     {
         $room = Room::factory()->create();
 
@@ -68,7 +68,7 @@ class GetTest extends TestCase
             ]);
     }
 
-    public function testRoomsShowEndpointWithNonExistingRoom(): void
+    public function testFailsToShowNonExistentRoom(): void
     {
         $nonExistingRoomId = 999;
 

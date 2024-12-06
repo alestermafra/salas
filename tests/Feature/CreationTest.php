@@ -12,7 +12,7 @@ class CreationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testRoomCanBeCreated(): void
+    public function testRoomPersistsInDatabase(): void
     {
         $data = ['room' => 'Meeting room'];
         $room = Room::factory()->create($data);
@@ -20,7 +20,7 @@ class CreationTest extends TestCase
         $this->assertDatabaseHas('rooms', $data);
     }
 
-    public function testReservationCanBeCreated(): void
+    public function testReservationPersistsInDatabase(): void
     {
         $room = Room::factory()->create();
         $data = [
@@ -32,14 +32,14 @@ class CreationTest extends TestCase
         $this->assertDatabaseHas('reservations', $data);
     }
 
-    public function testRoomHasManyReservations()
+    public function testRoomRelationshipWithMultiplesReservations()
     {
         $room = Room::factory()->hasReservations(3)->create();
 
         $this->assertCount(3, $room->reservations);
     }
 
-    public function testReservationBelongsToRoom()
+    public function testReservationBelongsToARoom()
     {
         $room = Room::factory()->create();
         $reservation = Reservation::factory()->create(['room_id' => $room->id]);

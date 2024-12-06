@@ -11,7 +11,7 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testRoomCreation(): void
+    public function testCreatesRoomSuccessfully(): void
     {
         $data = [
             'room' => 'Sala 53'
@@ -29,7 +29,7 @@ class PostTest extends TestCase
             ]);
     }
 
-    public function testRoomCreationWithoutRequiredValues(): void
+    public function testFailsToCreateRoomWithoutRequiredValues(): void
     {
         $response = $this->postJson(route('api.v1.rooms.store'), [], ['Accept' => 'application/json']);
 
@@ -37,7 +37,7 @@ class PostTest extends TestCase
             ->assertInvalid(['room']);
     }
 
-    public function testRoomUpdating(): void
+    public function testUpdatesRoomSuccessfully(): void
     {
         $room = Room::factory()->create();
         $data = ['room' => 'Sala Ceres'];
@@ -53,7 +53,7 @@ class PostTest extends TestCase
             ]);
     }
 
-    public function testRoomUpdatingWithInvalidData(): void
+    public function testFailsToUpdateRoomWithInvalidData(): void
     {
         $room = Room::factory()->create();
         $data = [];
@@ -64,7 +64,7 @@ class PostTest extends TestCase
             ->assertInvalid(['room']);
     }
 
-    public function testUpdatingARoomThatDoesNotExist(): void
+    public function testFailsToUpdateNonExistentRoom(): void
     {
         $roomId = 999;
         $data = ['room' => 'Sala Ceres'];
@@ -74,7 +74,7 @@ class PostTest extends TestCase
         $response->assertNotFound();
     }
 
-    public function testRoomDeletion(): void
+    public function testDeletesRoomSuccessfully(): void
     {
         $room = Room::factory()->create();
 
@@ -84,7 +84,7 @@ class PostTest extends TestCase
         $this->assertDatabaseMissing('rooms', ['id' => $room->id]);
     }
 
-    public function testRemovingARoomThatDoesNotExist(): void
+    public function testFailsToDeleteNonExistentRoom(): void
     {
         $roomId = 999;
 
