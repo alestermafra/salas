@@ -18,4 +18,15 @@ class RoomController extends Controller
     {
         return response()->json($room);
     }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'room' => 'required'
+        ]);
+
+        $room = Room::create($data);
+
+        return response()->json($room, 201);
+    }
 }
