@@ -41,4 +41,11 @@ class RoomController extends Controller
 
         return response()->json($room);
     }
+
+    public function destroy(Room $room)
+    {
+        $room->delete();
+
+        return response()->json(null, 204);
+    }
 }

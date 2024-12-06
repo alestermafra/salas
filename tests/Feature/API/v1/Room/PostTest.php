@@ -63,4 +63,22 @@ class PostTest extends TestCase
         $response->assertUnprocessable()
             ->assertInvalid(['room']);
     }
+
+    public function testRoomDeletion(): void
+    {
+        $room = Room::factory()->create();
+
+        $this->assertDatabaseHas('rooms', ['id' => $room->id]);
+        $this->deleteJson(route('api.v1.rooms.destroy', $room))
+            ->assertSuccessful();
+        $this->assertDatabaseMissing('rooms', ['id' => $room->id]);
+    }
+
+    public function testRemovingARoomThatDoesNotExist(): void
+    {
+        $roomId = 999;
+
+        $response = $this->deleteJson(route('api.v1.rooms.destroy', $roomId))
+            ->assertNotFound();
+    }
 }
