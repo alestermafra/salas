@@ -29,4 +29,16 @@ class RoomController extends Controller
 
         return response()->json($room, 201);
     }
+
+    public function update(Request $request, Room $room)
+    {
+        $data = $request->validate([
+            'room' => 'required'
+        ]);
+
+        $room->fill($data)
+            ->save();
+
+        return response()->json($room);
+    }
 }
