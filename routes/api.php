@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\RoomController;
 use App\Http\Controllers\API\v1\StatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -9,3 +10,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/v1/status', StatusController::class)->name('api.v1.status');
+Route::get('/v1/rooms', [RoomController::class, 'index'])->name('api.v1.rooms.index');
