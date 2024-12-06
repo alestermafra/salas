@@ -11,7 +11,7 @@ class GetTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testApiV1RoomsEndpointWithNoRooms(): void
+    public function testRoomsEndpointWithNoRooms(): void
     {
         $response = $this->get(route('api.v1.rooms.index'));
 
@@ -20,7 +20,7 @@ class GetTest extends TestCase
             ->assertJsonCount(0);
     }
 
-    public function testApiV1RoomsEndpointWith_2Rooms(): void
+    public function testRoomsEndpointWith_2Rooms(): void
     {
         $room1 = Room::factory()->create();
         $room2 = Room::factory()->create();
@@ -46,7 +46,7 @@ class GetTest extends TestCase
             ]);
     }
 
-    public function testApiV1RoomsEndpointWith_30Rooms(): void
+    public function testRoomsEndpointWith_30Rooms(): void
     {
         Room::factory(30)->create();
 
@@ -55,5 +55,29 @@ class GetTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonIsArray()
             ->assertJsonCount(30);
+    }
+
+    public function testRoomsShowEndpointWithExistingRoom(): void
+    {
+        $room = Room::factory()->create();
+
+        $response = $this->get(route('api.v1.rooms.show', $room));
+
+        $response->assertStatus(200)
+            ->assertExactJson([
+                "id" => $room->id,
+                "room" => $room->room,
+                "created_at" => $room->created_at->toISOString(),
+                "updated_at" => $room->updated_at->toISOString()
+            ]);
+    }
+
+    public function testRoomsShowEndpointWithNonExistingRoom(): void
+    {
+        $nonExistingRoomId = 999;
+
+        $response = $this->get(route('api.v1.rooms.show', $nonExistingRoomId));
+
+        $response->assertStatus(404);
     }
 }

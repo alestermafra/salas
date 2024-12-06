@@ -10,4 +10,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/v1/status', StatusController::class)->name('api.v1.status');
+Route::get('/v1/rooms/{room}', [RoomController::class, 'show'])->name('api.v1.rooms.show');
 Route::get('/v1/rooms', [RoomController::class, 'index'])->name('api.v1.rooms.index');
