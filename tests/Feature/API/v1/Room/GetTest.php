@@ -75,4 +75,63 @@ class GetTest extends TestCase
         $this->getJson(route('api.v1.rooms.show', $nonExistingRoomId))
             ->assertNotFound();
     }
+
+    public function testReturnsCorrectStructureWhenRetrieveRoomReservations(): void
+    {
+        $room = Room::factory()->hasReservations()->create();
+
+        $this->getJson(route('api.v1.rooms.reservations.index', $room))
+            ->assertSuccessful()
+            ->assertJsonIsArray()
+            ->assertJsonStructure([
+                '*' => [
+                    'id',
+                    'reservation',
+                    'room_id',
+                    'start',
+                    'end',
+                    'description',
+                    'created_at',
+                    'updated_at',
+                ]
+            ]);
+    }
+
+    public function testReturnsCorrectDataWhenRetrieveRoomReservation(): void
+    {
+        $room = Room::factory()->hasReservations()->create();
+        $reservation = $room->reservations->first();
+
+        $this->getJson(route('api.v1.rooms.reservations.index', $room))
+            ->assertSuccessful()
+            ->assertExactJson([
+                [
+                    'id' => $reservation->id,
+                    'reservation' => $reservation->reservation,
+                    'room_id' => $reservation->room_id,
+                    'start' => $reservation->start,
+                    'end' => $reservation->end,
+                    'description' => $reservation->description,
+                    'created_at' => $reservation->created_at,
+                    'updated_at' => $reservation->updated_at,
+                ]
+            ]);
+    }
+
+    public function testReturnsEmptyListWhenRetrieveReservationsForRoomThatHasNoReservations(): void
+    {
+        $room = Room::factory()->create();
+
+        $this->getJson(route('api.v1.rooms.reservations.index', $room))
+            ->assertSuccessful()
+            ->assertJsonCount(0);
+    }
+
+    public function testReturnsNotFoundWhenRetrieveReservationsForNonExistingRoom(): void
+    {
+        $nonExistingRoomId = 999;
+
+        $this->getJson(route('api.v1.rooms.reservations.index', $nonExistingRoomId))
+            ->assertNotFound();
+    }
 }

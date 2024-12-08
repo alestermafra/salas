@@ -48,4 +48,11 @@ class RoomController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function reservations(Room $room)
+    {
+        $reservations = $room->reservations;
+
+        return response()->json($reservations);
+    }
 }

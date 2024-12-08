@@ -15,3 +15,4 @@ Route::get('/v1/rooms', [RoomController::class, 'index'])->name('api.v1.rooms.in
 Route::post('/v1/rooms', [RoomController::class, 'store'])->name('api.v1.rooms.store');
 Route::put('/v1/rooms/{room}', [RoomController::class, 'update'])->name('api.v1.rooms.update');
 Route::delete('/v1/rooms/{room}', [RoomController::class, 'destroy'])->name('api.v1.rooms.destroy');
+Route::get('/v1/rooms/{room}/reservations', [RoomController::class, 'reservations'])->name('api.v1.rooms.reservations.index');
